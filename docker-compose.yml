@@ -12,3 +12,19 @@ services:
       - NODE_ENV=development
     # Active le hot reload
     command: npm run dev
+
+  db:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=citylink
+      - MYSQL_DATABASE=citylink
+      - MYSQL_USER=citylink
+      - MYSQL_PASSWORD=citylink
+  
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
