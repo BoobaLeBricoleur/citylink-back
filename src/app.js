@@ -5,7 +5,16 @@ const userRoutes = require('./routes/user.routes');
 const app = express();
 
 // Middlewares globaux
-app.use(cors()); // Permet les requêtes cross-origin
+// Configuration CORS détaillée
+app.use(cors({
+  origin: '*', // Autorise toutes les origines
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Méthodes autorisées
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'], // En-têtes autorisés
+  credentials: true, // Autorise l'envoi de cookies
+  maxAge: 86400 // Cache la pré-vérification pendant 24 heures
+}));
+app.options('*', cors()); // Pré-vérification CORS pour toutes les routes
+
 app.use(express.json()); // Parse les requêtes JSON
 app.use(express.urlencoded({ extended: true })); // Parse les formulaires
 
