@@ -10,7 +10,7 @@ class User {
 
   // Trouver un utilisateur par son email
   static async findByEmail(email) {
-    const [rows] = await pool.query('SELECT * FROM User dWHERE email = ?', [email]);
+    const [rows] = await pool.query('SELECT * FROM User WHERE email = ?', [email]);
     return rows[0];
   }
 
