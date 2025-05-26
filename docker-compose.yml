@@ -21,7 +21,16 @@ services:
       - MYSQL_PASSWORD=citylink
     volumes:
       - ./db-init:/docker-entrypoint-initdb.d
-  
+      - db_data:/var/lib/mysql
+
+  flyway:
+    image: flyway/flyway
+    depends_on:
+      - db
+    command: -url=jdbc:mysql://db:3306/citylink -user=citylink -password=citylink -baselineOnMigrate=true migrate
+    volumes:
+      - ./migrations:/flyway/sql
+
   phpmyadmin:
     image: phpmyadmin
     restart: always
@@ -29,4 +38,6 @@ services:
       - 8080:80
     environment:
       - PMA_ARBITRARY=1
-      
+
+volumes:
+  db_data:
