@@ -1,5 +1,4 @@
-USE
-citylink;
+USE citylink;
 
 -- Table: UserRole
 CREATE TABLE UserRole
@@ -13,14 +12,14 @@ CREATE TABLE UserRole
 CREATE TABLE User
 (
     id         INT PRIMARY KEY AUTO_INCREMENT,
-    firstname  VARCHAR(50)         NOT NULL,
-    lastname   VARCHAR(50)         NOT NULL,
+    firstname  VARCHAR(50) NOT NULL,
+    lastname   VARCHAR(50) NOT NULL,
     company    VARCHAR(100),
     email      VARCHAR(100) UNIQUE NOT NULL,
-    password   VARCHAR(255)        NOT NULL,
-    role_id    INT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (role_id) REFERENCES UserRole (id) ON DELETE SET NULL
+    password   VARCHAR(255) NOT NULL,
+    role_id    INT          NULL,
+    created_at DATETIME     DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (role_id) REFERENCES UserRole(id) ON DELETE SET NULL
 );
 
 -- Table: Category
@@ -38,14 +37,14 @@ CREATE TABLE Business
     name         VARCHAR(100) NOT NULL,
     description  TEXT,
     user_id      INT          NOT NULL,
-    category_id  INT          NOT NULL,
+    category_id  INT          NULL,
     address      VARCHAR(255),
     phone_number VARCHAR(20),
     email        VARCHAR(100),
     website_url  VARCHAR(255),
     created_at   DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES User (id) ON DELETE CASCADE,
-    FOREIGN KEY (category_id) REFERENCES Category (id) ON DELETE SET NULL
+    FOREIGN KEY (user_id)     REFERENCES User     (id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES Category(id) ON DELETE SET NULL
 );
 
 -- Table: Event
@@ -169,10 +168,10 @@ CREATE TABLE Survey
 -- Table: SurveyOption
 CREATE TABLE SurveyOption
 (
-    id        INT PRIMARY KEY AUTO_INCREMENT,
-    survey_id INT  NOT NULL,
-    option    TEXT NOT NULL,
-    FOREIGN KEY (survey_id) REFERENCES Survey (id) ON DELETE CASCADE
+    id         INT PRIMARY KEY AUTO_INCREMENT,
+    survey_id  INT          NOT NULL,
+    `option`   TEXT         NOT NULL,
+    FOREIGN KEY (survey_id) REFERENCES Survey(id) ON DELETE CASCADE
 );
 
 -- Table: SurveyResponse
