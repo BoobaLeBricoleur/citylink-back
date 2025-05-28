@@ -104,6 +104,8 @@ CREATE TABLE Announcement
     content          TEXT         NOT NULL,
     publication_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     user_id          INT          NOT NULL,
+    is_featured       BOOLEAN      DEFAULT FALSE,
+    is_active          BOOLEAN      DEFAULT TRUE,
     FOREIGN KEY (user_id) REFERENCES User (id) ON DELETE CASCADE
 );
 
