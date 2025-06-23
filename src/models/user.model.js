@@ -14,20 +14,74 @@ class User {
     return rows[0];
   }
 
-  // Créer un nouvel utilisateur
+ // Créer un nouvel utilisateur
   static async create(userData) {
-    const { firstname, lastname, company, email, password, role_id } = userData;
+    const { 
+      firstname, 
+      lastname, 
+      company, 
+      email, 
+      password, 
+      address,
+      postal_code,
+      city,
+      phone,
+      birthday,
+      mail_new_events,
+      mail_events,
+      public_profile,
+      role_id 
+    } = userData;
+    
     // Hasher le mot de passe avant stockage
     const hashedPassword = await bcrypt.hash(password, 10);
     
-    const [result] = await pool.query(
-      'INSERT INTO User (firstname, lastname, company, email, password, role_id) VALUES (?, ?, ?, ?, ?, ?)',
-      [firstname, lastname, company || null, email, hashedPassword, role_id || 2] // role_id 2 = utilisateur standard
-    );
-    
-    return { id: result.insertId, firstname, lastname, company, email, role_id };
+    try {
+      const [result] = await pool.query(
+        `INSERT INTO User (
+          firstname, lastname, company, email, password, 
+          address, postal_code, city, phone, birthday,
+          mail_new_events, mail_events, public_profile, role_id
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          firstname, 
+          lastname, 
+          company || null, 
+          email, 
+          hashedPassword, 
+          address || null, 
+          postal_code || null, 
+          city || null, 
+          phone || null,
+          birthday || null,
+          mail_new_events !== undefined ? mail_new_events : 0,
+          mail_events !== undefined ? mail_events : 0,
+          public_profile !== undefined ? public_profile : 0,
+          role_id || 2
+        ]
+      );
+  
+      if (!result.insertId) {
+        throw new Error("Échec de l'insertion de l'utilisateur dans la base de données.");
+      }
+  
+      // Récupérer l'utilisateur complet pour le renvoyer
+      const [user] = await pool.query('SELECT * FROM User WHERE id = ?', [result.insertId]);
+  
+      if (!user || user.length === 0) {
+        throw new Error("Utilisateur créé mais impossible à récupérer.");
+      }
+  
+      // Ne pas renvoyer le mot de passe
+      const { password: _, ...userDataReturn } = user[0];
+      
+      return userDataReturn;
+    } catch (error) {
+      console.error("Erreur SQL lors de la création:", error);
+      throw error;
+    }
   }
-
+  
   // Mettre à jour un utilisateur
   static async update(id, userData) {
     const { firstname, lastname, company, email, role_id } = userData;

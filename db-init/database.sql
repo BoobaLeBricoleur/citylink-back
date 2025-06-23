@@ -9,17 +9,25 @@ CREATE TABLE UserRole
 );
 
 -- Table: User
-CREATE TABLE User
-(
-    id         INT PRIMARY KEY AUTO_INCREMENT,
-    firstname  VARCHAR(50) NOT NULL,
-    lastname   VARCHAR(50) NOT NULL,
-    company    VARCHAR(100),
-    email      VARCHAR(100) UNIQUE NOT NULL,
-    password   VARCHAR(255) NOT NULL,
-    role_id    INT          NULL,
-    created_at DATETIME     DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (role_id) REFERENCES UserRole(id) ON DELETE SET NULL
+CREATE TABLE User (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    firstname VARCHAR(50) NOT NULL,
+    lastname VARCHAR(50) NOT NULL,
+    company VARCHAR(50),
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    address VARCHAR(255),
+    postal_code VARCHAR(10),
+    city VARCHAR(100),
+    phone VARCHAR(20),
+    birthday DATE,
+    mail_new_events BOOLEAN DEFAULT TRUE,
+    mail_events BOOLEAN DEFAULT TRUE,
+    public_profile BOOLEAN DEFAULT FALSE,
+    avatar VARCHAR(255),
+    role_id INT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (role_id) REFERENCES UserRole(id)
 );
 
 -- Table: Category

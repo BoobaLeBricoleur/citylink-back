@@ -5,7 +5,21 @@ const jwt = require('jsonwebtoken');
 // Inscription d'un nouvel utilisateur
 exports.register = async (req, res, next) => {
   try {
-    const { firstname, lastname, company, email, password } = req.body;
+    const { 
+      firstname, 
+      lastname, 
+      company, 
+      email, 
+      password,
+      address,
+      postal_code,
+      city,
+      phone,
+      birthday,
+      mail_new_events = true,
+      mail_events = true,
+      public_profile = false
+    } = req.body;
     
     // Vérifier si l'utilisateur existe déjà
     const existingUser = await User.findByEmail(email);
@@ -13,13 +27,21 @@ exports.register = async (req, res, next) => {
       return res.status(400).json({ message: 'Cet email est déjà utilisé' });
     }
     
-    // Créer l'utilisateur
+    // Créer l'utilisateur avec tous les nouveaux champs
     const user = await User.create({
       firstname,
       lastname,
       company,
       email,
       password,
+      address,
+      postal_code,
+      city,
+      phone,
+      birthday,
+      mail_new_events,
+      mail_events,
+      public_profile,
       role_id: 2 // Rôle utilisateur par défaut
     });
     
@@ -37,7 +59,16 @@ exports.register = async (req, res, next) => {
         firstname: user.firstname,
         lastname: user.lastname,
         email: user.email,
-        company: user.company
+        company: user.company,
+        address: user.address,
+        postal_code: user.postal_code,
+        city: user.city,
+        phone: user.phone,
+        avatar: user.avatar,
+        mail_new_events: user.mail_new_events,
+        mail_events: user.mail_events,
+        public_profile: user.public_profile,
+        role_id: user.role_id
       },
       token
     });
@@ -70,15 +101,11 @@ exports.login = async (req, res, next) => {
       { expiresIn: '24h' }
     );
     
+    // Renvoyer toutes les informations utilisateur sauf mot de passe
+    const { password: pwd, ...userData } = user;
+    
     res.json({
-      user: {
-        id: user.id,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        email: user.email,
-        company: user.company,
-        role_id: user.role_id
-      },
+      user: userData,
       token
     });
   } catch (error) {
@@ -117,6 +144,7 @@ exports.getAllUsers = async (req, res, next) => {
   }
 };
 
+
 // Mettre à jour un utilisateur
 exports.updateUser = async (req, res, next) => {
   try {
@@ -127,21 +155,59 @@ exports.updateUser = async (req, res, next) => {
       return res.status(403).json({ message: 'Non autorisé à modifier cet utilisateur' });
     }
     
-    const { firstname, lastname, company, email, role_id } = req.body;
+    const { 
+      firstname, 
+      lastname, 
+      company, 
+      email, 
+      address,
+      postal_code,
+      city,
+      phone,
+      birthday,
+      mail_new_events,
+      mail_events,
+      public_profile,
+      avatar,
+      role_id 
+    } = req.body;
     
-    const updated = await User.update(userId, {
+    // Préparer les données à mettre à jour
+    const updateData = {
       firstname,
       lastname,
       company,
       email,
-      role_id: req.user.role_id === 1 ? role_id : req.user.role_id // Seul admin peut changer le rôle
-    });
+      address,
+      postal_code,
+      city,
+      phone,
+      birthday,
+      mail_new_events,
+      mail_events,
+      public_profile,
+      avatar
+    };
+    
+    // Seul admin peut changer le rôle
+    if (req.user.role_id === 1 && role_id) {
+      updateData.role_id = role_id;
+    }
+    
+    const updated = await User.update(userId, updateData);
     
     if (!updated) {
       return res.status(404).json({ message: 'Utilisateur non trouvé' });
     }
     
-    res.json({ message: 'Utilisateur mis à jour avec succès' });
+    // Récupérer l'utilisateur mis à jour
+    const updatedUser = await User.findById(userId);
+    const { password, ...userData } = updatedUser;
+    
+    res.json({ 
+      message: 'Utilisateur mis à jour avec succès',
+      user: userData
+    });
   } catch (error) {
     next(error);
   }
