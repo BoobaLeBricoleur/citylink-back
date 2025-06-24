@@ -4,6 +4,7 @@ const userRoutes = require('./routes/user.routes');
 const announcementRoutes = require('./routes/announcement.routes');
 const businessRoutes = require('./routes/business.routes');
 const eventRoutes = require('./routes/event.routes');
+const emergencyRoutes = require('./routes/emergency.routes');
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/announcements', announcementRoutes);
 app.use('/api/business', businessRoutes);
 app.use('/api/events', eventRoutes);
+app.use('/api/emergency', emergencyRoutes);
 
 
 // Middleware de gestion d'erreurs global
