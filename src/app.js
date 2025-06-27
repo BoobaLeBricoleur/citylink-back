@@ -2,6 +2,10 @@ const express = require('express');
 const cors = require('cors');
 const userRoutes = require('./routes/user.routes');
 const announcementRoutes = require('./routes/announcement.routes');
+const businessRoutes = require('./routes/business.routes');
+const eventRoutes = require('./routes/event.routes');
+const emergencyRoutes = require('./routes/emergency.routes');
+const eventRegistrationRoutes = require('./routes/eventregistration.routes');
 
 const app = express();
 
@@ -27,6 +31,11 @@ app.get('/', (req, res) => {
 // Routes utilisateur
 app.use('/api/users', userRoutes);
 app.use('/api/announcements', announcementRoutes);
+app.use('/api/business', businessRoutes);
+app.use('/api/events', eventRoutes);
+app.use('/api/emergency', emergencyRoutes);
+app.use('/api/event-registrations', eventRegistrationRoutes);
+
 
 // Middleware de gestion d'erreurs global
 app.use((err, req, res, next) => {
