@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const controller = require('../controllers/eventRegistration.controller');
+const controller = require('../controllers/eventregistration.controller');
 const { auth } = require('../middlewares/auth.middleware');
 
 router.get('/user', controller.getUserRegistrations);
