@@ -2,11 +2,11 @@ const mysql = require('mysql2/promise');
 
 // Créer un pool de connexions pour une meilleure performance
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'tu8fr.h.filess.io',        // Nom du service dans docker-compose
-  user: process.env.DB_USER || 'CityLink_figuresave',  // Utilisateur MySQL
-  port: process.env.DB_PORT || 61002, // Port MySQL
-  password: process.env.DB_PASSWORD || 'citylink', // Mot de passe MySQL
-  database: process.env.DB_NAME || 'CityLink_figuresave', // Nom de la base de données
+  host: process.env.DB_HOST || 'jxx9bm.h.filess.io',        // Nom du service dans docker-compose
+  user: process.env.DB_USER || 'CityLink_awaregrade',  // Utilisateur MySQL
+  port: process.env.DB_PORT || 3307, // Port MySQL
+  password: process.env.DB_PASSWORD || '1132211374fca5ac37f7088e7a475d92f852d557', // Mot de passe MySQL
+  database: process.env.DB_NAME || 'CityLink_awaregrade', // Nom de la base de données
   waitForConnections: true,
   connectionLimit: 10,  // Nombre max de connexions simultanées
   queueLimit: 0
