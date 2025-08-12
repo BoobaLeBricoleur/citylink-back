@@ -198,6 +198,32 @@ CREATE TABLE SurveyResponse
     UNIQUE (user_id, survey_id)
 );
 
+-- Table: Information
+CREATE TABLE Information (
+                             id INT PRIMARY KEY AUTO_INCREMENT,
+                             title VARCHAR(150) NOT NULL,
+                             content TEXT NOT NULL,
+                             summary TEXT,
+                             publication_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+                             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Table: Tag
+CREATE TABLE Tag (
+                     id INT PRIMARY KEY AUTO_INCREMENT,
+                     name VARCHAR(50) NOT NULL UNIQUE
+);
+
+-- Table: InformationTag
+CREATE TABLE InformationTag (
+                                information_id INT NOT NULL,
+                                tag_id INT NOT NULL,
+                                PRIMARY KEY (information_id, tag_id),
+                                FOREIGN KEY (information_id) REFERENCES Information(id) ON DELETE CASCADE,
+                                FOREIGN KEY (tag_id) REFERENCES Tag(id) ON DELETE CASCADE
+);
+
 -- Initialisation des rôles utilisateur
 INSERT INTO UserRole (id, name, description)
 VALUES (1, 'admin', 'Administrateur avec accès complet'),
