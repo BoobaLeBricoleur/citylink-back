@@ -8,6 +8,7 @@ const emergencyRoutes = require('./routes/emergency.routes');
 const eventRegistrationRoutes = require('./routes/eventregistration.routes');
 const infornationRoutes = require('./routes/information.routes');
 const tagRoutes = require('./routes/tag.routes');
+const forumRoutes = require('./routes/forum.routes');
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use('/api/emergency', emergencyRoutes);
 app.use('/api/event-registrations', eventRegistrationRoutes);
 app.use('/api/information', infornationRoutes);
 app.use('/api/tags', tagRoutes)
+app.use('/api/forums', forumRoutes);
 
 
 // Middleware de gestion d'erreurs global
