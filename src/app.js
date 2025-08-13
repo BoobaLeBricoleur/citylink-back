@@ -9,6 +9,7 @@ const eventRegistrationRoutes = require('./routes/eventregistration.routes');
 const infornationRoutes = require('./routes/information.routes');
 const tagRoutes = require('./routes/tag.routes');
 const forumRoutes = require('./routes/forum.routes');
+const surveyRoutes = require('./routes/survey.routes');
 
 const app = express();
 
@@ -41,7 +42,7 @@ app.use('/api/event-registrations', eventRegistrationRoutes);
 app.use('/api/information', infornationRoutes);
 app.use('/api/tags', tagRoutes)
 app.use('/api/forums', forumRoutes);
-
+app.use('/api/surveys', surveyRoutes);
 
 // Middleware de gestion d'erreurs global
 app.use((err, req, res, next) => {
