@@ -16,6 +16,14 @@ class Business {
         );
         return rows;
     }
+    
+    static async getByUserId(userId) {
+        const [rows] = await pool.query(
+            'SELECT b.*, u.firstname, u.lastname FROM Business b JOIN User u ON b.user_id = u.id WHERE b.user_id = ? ORDER BY b.created_at DESC',
+            [userId]
+        );
+        return rows;
+    }
 
     static async getAllCategories() {
         const [rows] = await pool.query('SELECT * FROM Category ORDER BY name ASC');

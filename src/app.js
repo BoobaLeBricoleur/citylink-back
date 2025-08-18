@@ -6,6 +6,10 @@ const businessRoutes = require('./routes/business.routes');
 const eventRoutes = require('./routes/event.routes');
 const emergencyRoutes = require('./routes/emergency.routes');
 const eventRegistrationRoutes = require('./routes/eventregistration.routes');
+const infornationRoutes = require('./routes/information.routes');
+const tagRoutes = require('./routes/tag.routes');
+const forumRoutes = require('./routes/forum.routes');
+const surveyRoutes = require('./routes/survey.routes');
 
 const app = express();
 
@@ -35,7 +39,10 @@ app.use('/api/business', businessRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/emergency', emergencyRoutes);
 app.use('/api/event-registrations', eventRegistrationRoutes);
-
+app.use('/api/information', infornationRoutes);
+app.use('/api/tags', tagRoutes)
+app.use('/api/forums', forumRoutes);
+app.use('/api/surveys', surveyRoutes);
 
 // Middleware de gestion d'erreurs global
 app.use((err, req, res, next) => {

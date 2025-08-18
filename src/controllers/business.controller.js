@@ -10,6 +10,16 @@ exports.getAllBusinesses = async (req, res, next) => {
     }
 };
 
+exports.getMyBusinesses = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        const businesses = await Business.getByUserId(userId);
+        res.json(businesses);
+    } catch (error) {
+        next(error);
+    }
+};
+
 exports.getAllCategories = async (req, res, next) => {
     try {
         const categories = await Business.getAllCategories();
@@ -41,11 +51,16 @@ exports.createBusiness = async (req, res, next) => {
 
 exports.updateBusiness = async (req, res, next) => {
     try {
-        const business = await Business.findById(req.params.id);
+        // Si req.business existe, c'est que le middleware isBusinessOwnerOrAdmin l'a déjà récupéré
+        const business = req.business || await Business.findById(req.params.id);
+        
         if (!business) return res.status(404).json({ message: 'Commerce non trouvé' });
-        if (req.user.id !== business.user_id && req.user.role_id !== 1) {
+        
+        // Cette vérification est redondante si isBusinessOwnerOrAdmin a déjà été utilisé
+        if (!req.business && req.user.id !== business.user_id && req.user.role_id !== 1) {
             return res.status(403).json({ message: 'Non autorisé' });
         }
+        
         const updated = await Business.update(req.params.id, req.body);
         if (!updated) return res.status(400).json({ message: 'Échec de mise à jour' });
         res.json({ message: 'Commerce mis à jour' });
@@ -56,11 +71,16 @@ exports.updateBusiness = async (req, res, next) => {
 
 exports.deleteBusiness = async (req, res, next) => {
     try {
-        const business = await Business.findById(req.params.id);
+        // Si req.business existe, c'est que le middleware isBusinessOwnerOrAdmin l'a déjà récupéré
+        const business = req.business || await Business.findById(req.params.id);
+        
         if (!business) return res.status(404).json({ message: 'Commerce non trouvé' });
-        if (req.user.id !== business.user_id && req.user.role_id !== 1) {
+        
+        // Cette vérification est redondante si isBusinessOwnerOrAdmin a déjà été utilisé
+        if (!req.business && req.user.id !== business.user_id && req.user.role_id !== 1) {
             return res.status(403).json({ message: 'Non autorisé' });
         }
+        
         const deleted = await Business.delete(req.params.id);
         if (!deleted) return res.status(400).json({ message: 'Échec de suppression' });
         res.json({ message: 'Commerce supprimé' });
